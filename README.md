@@ -28,7 +28,8 @@ Runs entirely in the browser. No backend, no accounts, nothing uploaded.
 |------|-------|
 | Data model + schema (zod) | done |
 | Container / tool libraries | seeded from public Milwaukee data (see below) |
-| 2D arrangement canvas (SVG, drag + rotate + snap) | done |
+| Arrangement canvas | done — realistic top-down preview (tool silhouettes, carved pockets, depth shading) with drag / rotate / snap; "Schematic" toggle for plain outlines |
+| Auto-arrange | done — one-click row packing; tools drop onto the canvas as soon as they're added |
 | Fit validation (bounds, overlap, min-wall, height, depth) | done, unit-tested |
 | Project save / load / autosave | done |
 | STL export | working via a rectilinear grid engine — **plain rectangular pockets only** |

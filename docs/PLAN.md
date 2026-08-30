@@ -85,7 +85,9 @@ keep manifold-3d as the escape hatch.
   at true scale with a mm grid. (Pan/zoom not yet — the cavity fits the viewport
   for now.)
 - **M2 — Tools + arrangement** ✅: starter library + measure-a-tool form; place /
-  drag / rotate (90°) / snap; project save, load, and localStorage autosave.
+  drag / rotate (90°) / snap; auto-arrange (row packing); realistic top-down
+  render (per-category tool silhouettes, recessed pockets, depth shading) with a
+  schematic-outline toggle; project save, load, and localStorage autosave.
 - **M3 — Validation** ✅: overlap, bounds, min-wall (neighbour + edge), height,
   pocket-depth rules; verify panel with error/warning counts; unit tests.
 - **M4 — Geometry engine** 🚧: `GeometryEngine` interface + `SlabGeometryEngine`
