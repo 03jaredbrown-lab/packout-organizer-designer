@@ -76,6 +76,20 @@ export type { Issue, IssueSeverity, ValidationResult } from "../layout/validate"
 
 export { autoArrange } from "../layout/autoArrange";
 
+export {
+  EMPTY_OVERRIDE,
+  mergeContainer,
+  mergeOverride,
+  patchPlacement,
+  arrangeProject,
+  newPlacement,
+  placeTool,
+  addAndPlaceTool,
+  updateGlobals,
+  removeTool,
+} from "../layout/designOps";
+export type { ContainerOverride } from "../layout/designOps";
+
 // ---- geometry + STL --------------------------------------------------------
 export type {
   GeometryEngine,
