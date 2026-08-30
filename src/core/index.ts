@@ -74,6 +74,8 @@ export type { ResolvedPocket } from "../layout/pockets";
 export { validateLayout } from "../layout/validate";
 export type { Issue, IssueSeverity, ValidationResult } from "../layout/validate";
 
+export { autoArrange } from "../layout/autoArrange";
+
 // ---- geometry + STL --------------------------------------------------------
 export type {
   GeometryEngine,

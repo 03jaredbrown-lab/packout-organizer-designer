@@ -209,7 +209,7 @@ const CATEGORIES: ToolCategory[] = [
 
 export function ToolLibraryPanel() {
   const project = useDesignStore((s) => s.project);
-  const addTool = useDesignStore((s) => s.addTool);
+  const addAndPlaceTool = useDesignStore((s) => s.addAndPlaceTool);
   const placeTool = useDesignStore((s) => s.placeTool);
   const removeTool = useDesignStore((s) => s.removeTool);
   const unit = useDesignStore((s) => s.displayUnit);
@@ -255,7 +255,7 @@ export function ToolLibraryPanel() {
         {starterAvailable.map((t) => (
           <li key={t.id}>
             <span className="tool-name">{t.name}</span>
-            <button className="link" onClick={() => addTool(t)}>
+            <button className="link" onClick={() => addAndPlaceTool(t)}>
               add
             </button>
           </li>
@@ -272,7 +272,7 @@ export function ToolLibraryPanel() {
 }
 
 function ToolForm({ onDone }: { onDone: () => void }) {
-  const addTool = useDesignStore((s) => s.addTool);
+  const addAndPlaceTool = useDesignStore((s) => s.addAndPlaceTool);
   const unit = useDesignStore((s) => s.displayUnit);
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
@@ -296,7 +296,7 @@ function ToolForm({ onDone }: { onDone: () => void }) {
       source: "user-measured",
       notes: "",
     };
-    addTool(tool);
+    addAndPlaceTool(tool);
     onDone();
   }
 

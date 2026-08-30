@@ -2,7 +2,10 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { DisplayUnit } from "../model/units";
 import type { Container, GlobalParams, Placement, Project, Tool } from "../model/types";
+import { isUsableContainer, isUsableTool } from "../model/types";
 import { createProject, ensureTool, nextId } from "../model/project";
+import { autoArrange } from "../layout/autoArrange";
+import { insertFootprint } from "../layout/pockets";
 import { CONTAINERS, findContainer } from "../data";
 
 export interface ContainerOverride {
@@ -32,6 +35,8 @@ interface DesignState {
   removeTool: (toolId: string) => void;
 
   placeTool: (toolId: string) => void;
+  addAndPlaceTool: (tool: Tool) => void;
+  autoArrangeAll: () => void;
   movePlacement: (id: string, x_mm: number, y_mm: number) => void;
   nudgePlacement: (id: string, dx: number, dy: number) => void;
   rotatePlacement: (id: string, rot_deg: number) => void;
@@ -47,6 +52,21 @@ function patchPlacement(project: Project, id: string, fn: (p: Placement) => Plac
   return {
     ...project,
     placements: project.placements.map((p) => (p.id === id ? fn(p) : p)),
+  };
+}
+
+function arrangeProject(
+  project: Project,
+  overrides: Record<string, ContainerOverride>,
+): Project {
+  const base = findContainer(project.containerId);
+  if (!base) return project;
+  const container = mergeContainer(base, overrides[project.containerId]);
+  if (!isUsableContainer(container)) return project;
+  const footprint = insertFootprint(container, project.global);
+  return {
+    ...project,
+    placements: autoArrange(project.placements, project.tools, footprint, project.global),
   };
 }
 
@@ -121,6 +141,27 @@ export const useDesignStore = create<DesignState>()(
             selectedPlacementId: placement.id,
           };
         }),
+
+      addAndPlaceTool: (tool) =>
+        set((s) => {
+          let project = ensureTool(s.project, tool);
+          if (isUsableTool(tool) && !project.placements.some((p) => p.toolId === tool.id)) {
+            const placement: Placement = {
+              id: nextId("p"),
+              toolId: tool.id,
+              x_mm: 15,
+              y_mm: 15,
+              rot_deg: 0,
+              overrides: {},
+            };
+            project = { ...project, placements: [...project.placements, placement] };
+          }
+          project = arrangeProject(project, s.containerOverrides);
+          return { project };
+        }),
+
+      autoArrangeAll: () =>
+        set((s) => ({ project: arrangeProject(s.project, s.containerOverrides) })),
 
       movePlacement: (id, x_mm, y_mm) =>
         set((s) => ({ project: patchPlacement(s.project, id, (p) => ({ ...p, x_mm, y_mm })) })),
