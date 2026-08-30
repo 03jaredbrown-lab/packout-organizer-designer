@@ -53,14 +53,16 @@ opens in Expo Go.
 
 ```bash
 cd mobile
-npm install
-npx expo install --fix     # aligns versions to the installed SDK
+npm install                # confirmed working — installs ~900 packages, Expo SDK 52
+npx expo install --fix     # bump to whatever SDK your Expo Go supports
 npx expo start
 ```
 
-If `npm install` complains about a version, run
-`npx expo install expo@latest && npx expo install --fix` and retry. Then scan the
-QR with Expo Go.
+`npm install` here is known-good (CI runs it). The catch is that App Store
+**Expo Go only runs the current SDK**, so if `npx expo start` says the SDK is
+unsupported, run `npx expo install expo@latest && npx expo install --fix` (that
+may also need the `expo-file-system` import tweak noted in `src/export.ts`), then
+scan the QR with Expo Go. If that gets fiddly, use Option A.
 
 ### Testing without a computer running the server later
 
