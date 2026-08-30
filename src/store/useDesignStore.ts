@@ -59,19 +59,17 @@ export const useDesignStore = create<DesignState>()(
       containerOverrides: {},
 
       setContainerOverride: (id, patch) =>
-        set((s) => ({
-          containerOverrides: {
-            ...s.containerOverrides,
-            [id]: {
-              x_mm: null,
-              y_mm: null,
-              z_mm: null,
-              verified: false,
-              ...s.containerOverrides[id],
-              ...patch,
-            },
-          },
-        })),
+        set((s) => {
+          const prev: ContainerOverride = s.containerOverrides[id] ?? {
+            x_mm: null,
+            y_mm: null,
+            z_mm: null,
+            verified: false,
+          };
+          return {
+            containerOverrides: { ...s.containerOverrides, [id]: { ...prev, ...patch } },
+          };
+        }),
 
       newProject: (containerId, name) =>
         set({ project: createProject(containerId, name), selectedPlacementId: null }),
