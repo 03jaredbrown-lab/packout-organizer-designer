@@ -13,8 +13,19 @@ type GlyphKey = ToolCategory | "tape" | "knife";
 
 function classify(category: ToolCategory, name: string): GlyphKey {
   const n = name.toLowerCase();
-  if (/tape measure|tape\b|measuring tape/.test(n)) return "tape";
-  if (/utility knife|box cutter|\bknife\b|blade/.test(n)) return "knife";
+  // Name keywords come first: a hand-measured tool is usually left at the
+  // "other" category, so "M18 impact" should still read as an impact driver.
+  if (/tape measure|measuring tape|\btape\b/.test(n)) return "tape";
+  if (/utility knife|box cutter|\bknife\b|\bblade\b|snips|shears/.test(n)) return "knife";
+  if (/impact|ratchet|\bwrench\b/.test(n)) return "impact";
+  if (/hammer ?drill|\bdrill\b|\bdriver\b|rotary hammer/.test(n)) return "drill";
+  if (/sawzall|reciprocating|recip saw|circular saw|\bsaw\b|grinder|multi-?tool|oscillating/.test(n))
+    return "saw";
+  if (/multimeter|voltage|clamp meter|\bmeter\b|\btester\b|laser|\blevel\b|stud finder/.test(n))
+    return "meter";
+  if (/battery|charger|\bpack\b|bit set|socket set|driver set|\bkit\b/.test(n)) return "accessory";
+  if (/pliers|screwdriver|nut driver|chisel|pry bar|crow ?bar|\bsquare\b|\bclamp\b|hammer\b/.test(n))
+    return "hand-tool";
   return category;
 }
 
@@ -127,12 +138,16 @@ export function ToolGlyph({ category, name, x, y, w, h, color }: Props) {
       );
       break;
     default:
+      // Generic power tool — a body, a nose, and a pistol grip. Reads as "a
+      // tool" rather than a plain box for anything we can't identify.
       body = (
         <>
-          <Rect x={12} y={32} width={76} height={36} rx={8} {...solid} />
-          <Rect x={30} y={38} width={3} height={24} rx={1} {...soft} />
-          <Rect x={48} y={38} width={3} height={24} rx={1} {...soft} />
-          <Rect x={66} y={38} width={3} height={24} rx={1} {...soft} />
+          <Rect x={10} y={30} width={50} height={30} rx={9} {...solid} />
+          <Rect x={56} y={38} width={15} height={14} rx={3} {...solid} />
+          <Circle cx={74} cy={45} r={7} {...solid} />
+          <Circle cx={74} cy={45} r={3} {...soft} />
+          <Rect x={24} y={56} width={19} height={30} rx={6} {...solid} />
+          <Rect x={18} y={80} width={30} height={14} rx={4} {...soft} />
         </>
       );
   }
