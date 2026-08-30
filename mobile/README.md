@@ -13,13 +13,16 @@ Working:
   global parameters (mm/inch toggle).
 - Tools tab: starter library + a "measure a tool" form; tools drop onto the
   layout when added.
-- Arrange tab: true-scale top-down canvas (`react-native-svg`), drag to move,
-  rotate 90°, delete, one-tap auto-arrange, live fit checks.
+- Arrange tab: true-scale top-down canvas (`react-native-svg`) with a
+  **Realistic** view (carved-pocket look + per-category tool silhouettes,
+  `src/toolGlyph.tsx`) and a plain **Schematic** view; drag to move, rotate 90°,
+  delete, one-tap auto-arrange, button zoom (−/reset/+) with drag-to-pan, live
+  fit checks.
 - Export: generates a binary STL on device and opens the iOS share sheet
   (Mail / AirDrop / Files / Messages…). No account, works offline.
 
-Not done yet: realistic tool silhouettes (the web app's fancy render), pinch/pan
-zoom, project save/load files, server-side "email me the STL", Android polish.
+Not done yet: pinch-to-zoom gesture (zoom is buttons for now), project
+save/load files, server-side "email me the STL", Android polish.
 
 ## Run it on your iPhone
 
