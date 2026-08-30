@@ -37,7 +37,9 @@ interface DesignState {
 
   setContainer: (id: string) => void;
   setUnit: (u: DisplayUnit) => void;
+  setName: (name: string) => void;
   newProject: (containerId: string) => void;
+  loadProject: (project: Project) => void;
   updateGlobals: (patch: Partial<GlobalParams>) => void;
   setContainerOverride: (id: string, patch: Partial<ContainerOverride>) => void;
 
@@ -74,8 +76,10 @@ export const useDesignStore = create<DesignState>()(
 
       setContainer: (id) => set((s) => ({ project: { ...s.project, containerId: id } })),
       setUnit: (displayUnit) => set({ displayUnit }),
+      setName: (name) => set((s) => ({ project: { ...s.project, name } })),
       newProject: (containerId) =>
         set({ project: createProject(containerId, "My PACKOUT layout"), selectedPlacementId: null }),
+      loadProject: (project) => set({ project, selectedPlacementId: null }),
 
       updateGlobals: (patch) => set((s) => ({ project: opUpdateGlobals(s.project, patch) })),
 

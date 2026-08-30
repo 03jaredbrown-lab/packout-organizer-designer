@@ -25,6 +25,7 @@ import {
 import { CONTAINERS, STARTER_TOOLS } from "../src/data";
 import { useDesignStore, useEffectiveContainer } from "./src/store";
 import { exportAndShareSTL } from "./src/export";
+import { openProjectFile, saveProjectFile } from "./src/projectFile";
 import { ArrangeCanvas } from "./src/ArrangeCanvas";
 import {
   Btn,
@@ -152,6 +153,8 @@ export default function App() {
 function ContainerPanel() {
   const project = useDesignStore((s) => s.project);
   const setContainer = useDesignStore((s) => s.setContainer);
+  const setName = useDesignStore((s) => s.setName);
+  const loadProject = useDesignStore((s) => s.loadProject);
   const unit = useDesignStore((s) => s.displayUnit);
   const ov = useDesignStore((s) => s.containerOverrides[project.containerId]);
   const setOverride = useDesignStore((s) => s.setContainerOverride);
@@ -161,8 +164,26 @@ function ContainerPanel() {
   const measured = isUsableContainer(container);
   const g = project.global;
 
+  async function onOpen() {
+    try {
+      const p = await openProjectFile();
+      if (p) loadProject(p);
+    } catch (err) {
+      Alert.alert("Couldn't open that file", String((err as Error)?.message ?? err));
+    }
+  }
+
   return (
     <View>
+      <SectionTitle>Project</SectionTitle>
+      <Card>
+        <TextField label="Name" value={project.name} onChangeText={setName} />
+        <Row style={{ gap: 8 }}>
+          <Btn label="Save / share" onPress={() => void saveProjectFile(project)} style={{ flex: 1 }} />
+          <Btn label="Open…" onPress={onOpen} style={{ flex: 1 }} />
+        </Row>
+      </Card>
+
       <SectionTitle>Container</SectionTitle>
       <Card>
         {CONTAINERS.map((c) => {
