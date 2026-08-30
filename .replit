@@ -1,0 +1,24 @@
+# Replit config. Import this repo into Replit ("Create Repl" -> "Import from GitHub")
+# and it runs with no extra setup: `npm install` on first boot, then `npm run dev`.
+run = "npm run dev"
+entrypoint = "src/main.tsx"
+modules = ["nodejs-20"]
+
+hidden = [".config", "dist", "node_modules", ".vite"]
+
+[nix]
+channel = "stable-24_05"
+
+[env]
+# Vite dev server must bind 0.0.0.0 and the forwarded port for Replit's web preview.
+HOST = "0.0.0.0"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[deployment]
+# `Deploy` in Replit publishes the built static site (no server needed for v1).
+deploymentTarget = "static"
+publicDir = "dist"
+build = ["sh", "-c", "npm run build"]

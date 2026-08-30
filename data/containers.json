@@ -1,83 +1,114 @@
 {
-  "$comment": "PLACEHOLDER LIBRARY. Every 'internal' dimension is null and every entry is verified:false. Nothing here is safe to drive an STL export until measured on the physical container and marked verified:true with a source. Model numbers are from public catalog listings and still need confirmation.",
+  "$comment": "PACKOUT container library. 'internal' is the usable cavity an insert can occupy, in millimetres. Entries with source 'milwaukee-spec' were taken from the published spec table on milwaukeetool.com (converted from inches at 25.4 mm/in) and are the best public data available, but 'verified' stays false until the cavity is confirmed with calipers on the physical container -- published interior figures round hard and ignore draft angle, rib intrusions, and the lip under the lid. Do not drive an STL export from an unverified container. Model numbers are US SKUs.",
   "schema": 1,
   "containers": [
     {
-      "id": "lp-organizer",
-      "name": "PACKOUT Low-Profile Organizer",
+      "id": "lp-compact-organizer",
+      "name": "PACKOUT Low-Profile Compact Organizer",
       "modelNumbers": ["48-22-8436"],
       "family": "organizer",
-      "internal": { "x_mm": null, "y_mm": null, "z_mm": null },
-      "features": { "hasRemovableBins": true, "floorProfile": "flat", "cornerRadius_mm": null },
+      "exterior_mm": { "x": 248.9, "y": 411.5, "z": 63.5 },
+      "internal": { "x_mm": 203.2, "y_mm": 304.8, "z_mm": 45.7 },
+      "features": { "hasRemovableBins": true, "floorProfile": "flat", "cornerRadius_mm": 12 },
       "verified": false,
-      "source": "",
-      "notes": "Shallow organizer; popular target for custom inserts."
+      "source": "milwaukee-spec: milwaukeetool.com product 48-22-8436, interior 8.0 x 12.0 x 1.8 in",
+      "notes": "Shallowest organizer. z is bin-cavity depth; with the bins removed the shell floor sits a few mm lower. Confirm before export."
+    },
+    {
+      "id": "organizer",
+      "name": "PACKOUT Organizer (10-compartment)",
+      "modelNumbers": ["48-22-8430"],
+      "family": "organizer",
+      "exterior_mm": { "x": 500.4, "y": 386.1, "z": 116.8 },
+      "internal": { "x_mm": 457.2, "y_mm": 304.8, "z_mm": 99.1 },
+      "features": { "hasRemovableBins": true, "floorProfile": "flat", "cornerRadius_mm": 12 },
+      "verified": false,
+      "source": "milwaukee-spec: milwaukeetool.com product 48-22-8430, interior 18.0 x 12.0 x 3.9 in",
+      "notes": "The standard organizer. Interior height is to the underside of the closed lid; usable pocket depth is less once base thickness and lid clearance are subtracted."
     },
     {
       "id": "deep-organizer",
       "name": "PACKOUT Deep Organizer",
-      "modelNumbers": ["48-22-8430"],
+      "modelNumbers": ["48-22-8432"],
       "family": "organizer",
+      "exterior_mm": { "x": 500.4, "y": 386.1, "z": 165.1 },
       "internal": { "x_mm": null, "y_mm": null, "z_mm": null },
-      "features": { "hasRemovableBins": true, "floorProfile": "flat", "cornerRadius_mm": null },
+      "features": { "hasRemovableBins": true, "floorProfile": "flat", "cornerRadius_mm": 12 },
       "verified": false,
       "source": "",
-      "notes": "Deeper compartments than the low-profile organizer."
+      "notes": "Same footprint as the standard organizer, deeper cavity. Milwaukee's product page did not expose an interior figure to a plain fetch; measure before use."
+    },
+    {
+      "id": "compact-organizer",
+      "name": "PACKOUT Compact Organizer",
+      "modelNumbers": ["48-22-8435"],
+      "family": "organizer",
+      "exterior_mm": { "x": 248.9, "y": 386.1, "z": 116.8 },
+      "internal": { "x_mm": null, "y_mm": null, "z_mm": null },
+      "features": { "hasRemovableBins": true, "floorProfile": "flat", "cornerRadius_mm": 12 },
+      "verified": false,
+      "source": "",
+      "notes": "Half-width version of the standard organizer. Measure before use."
+    },
+    {
+      "id": "lp-organizer",
+      "name": "PACKOUT Low-Profile Organizer",
+      "modelNumbers": ["48-22-8431"],
+      "family": "organizer",
+      "exterior_mm": { "x": 500.4, "y": 386.1, "z": 63.5 },
+      "internal": { "x_mm": null, "y_mm": null, "z_mm": null },
+      "features": { "hasRemovableBins": true, "floorProfile": "flat", "cornerRadius_mm": 12 },
+      "verified": false,
+      "source": "",
+      "notes": "Full-width shallow organizer. Measure before use."
     },
     {
       "id": "2drawer-toolbox",
       "name": "PACKOUT 2-Drawer Tool Box",
       "modelNumbers": ["48-22-8442"],
       "family": "drawer",
+      "exterior_mm": { "x": 600, "y": 380, "z": 260 },
       "internal": { "x_mm": null, "y_mm": null, "z_mm": null },
-      "features": { "hasRemovableBins": false, "floorProfile": "flat", "cornerRadius_mm": null },
+      "features": { "hasRemovableBins": false, "floorProfile": "flat", "cornerRadius_mm": 8 },
       "verified": false,
       "source": "",
-      "notes": "Per-drawer cavity; each drawer is its own design target."
+      "notes": "Each drawer is its own design target -- the layout is the drawer's inner cavity, not the whole box. Exterior is approximate. Measure each drawer before use."
     },
     {
       "id": "3drawer-toolbox",
       "name": "PACKOUT 3-Drawer Tool Box",
       "modelNumbers": ["48-22-8443"],
       "family": "drawer",
+      "exterior_mm": { "x": 600, "y": 380, "z": 260 },
       "internal": { "x_mm": null, "y_mm": null, "z_mm": null },
-      "features": { "hasRemovableBins": false, "floorProfile": "flat", "cornerRadius_mm": null },
+      "features": { "hasRemovableBins": false, "floorProfile": "flat", "cornerRadius_mm": 8 },
       "verified": false,
       "source": "",
-      "notes": "Per-drawer cavity; each drawer is its own design target."
+      "notes": "Each drawer is its own design target. Exterior is approximate. Measure each drawer before use."
     },
     {
       "id": "large-toolbox",
       "name": "PACKOUT Large Tool Box",
-      "modelNumbers": ["48-22-8429"],
-      "family": "toolbox",
-      "internal": { "x_mm": null, "y_mm": null, "z_mm": null },
-      "features": { "hasRemovableBins": true, "floorProfile": "flat", "cornerRadius_mm": null },
-      "verified": false,
-      "source": "",
-      "notes": "Main lower cavity (below the removable tray)."
-    },
-    {
-      "id": "medium-toolbox",
-      "name": "PACKOUT Medium Tool Box",
       "modelNumbers": ["48-22-8425"],
       "family": "toolbox",
+      "exterior_mm": { "x": 559, "y": 410, "z": 419 },
       "internal": { "x_mm": null, "y_mm": null, "z_mm": null },
-      "features": { "hasRemovableBins": true, "floorProfile": "flat", "cornerRadius_mm": null },
+      "features": { "hasRemovableBins": true, "floorProfile": "flat", "cornerRadius_mm": 10 },
       "verified": false,
       "source": "",
-      "notes": "Main lower cavity (below the removable tray)."
+      "notes": "Design target is the main lower cavity below the removable tray, or the tray itself -- decide per project. Measure before use."
     },
     {
       "id": "crate",
       "name": "PACKOUT Crate",
       "modelNumbers": ["48-22-8440"],
       "family": "crate",
+      "exterior_mm": { "x": 508, "y": 400, "z": 289 },
       "internal": { "x_mm": null, "y_mm": null, "z_mm": null },
-      "features": { "hasRemovableBins": false, "floorProfile": "ribbed", "cornerRadius_mm": null },
+      "features": { "hasRemovableBins": false, "floorProfile": "ribbed", "cornerRadius_mm": 10 },
       "verified": false,
       "source": "",
-      "notes": "Open-top crate."
+      "notes": "Open-top crate with a ribbed floor -- an insert needs a full floor of its own or feet that clear the ribs. Measure before use."
     }
   ]
 }

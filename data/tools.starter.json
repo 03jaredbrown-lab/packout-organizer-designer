@@ -1,0 +1,84 @@
+{
+  "$comment": "Starter tool library. Milwaukee's product pages publish a tool's overall Length and its bare weight, but NOT width or height, so no entry here has a complete bounding box from a published source. 'l' values with source 'milwaukee-spec' are the published Length (converted from inches at 25.4). 'w' and 'h' are null until measured -- a top-down pocket needs all three. Measure with the battery you actually store on the tool (or none), on a flat surface. Set verified:true only after you have measured all three yourself.",
+  "schema": 1,
+  "tools": [
+    {
+      "id": "m18-fuel-hammerdrill-2904",
+      "name": "M18 FUEL 1/2\" Hammer Drill/Driver (bare)",
+      "brand": "Milwaukee",
+      "modelNumbers": ["2904-20"],
+      "category": "drill",
+      "bbox_mm": { "l": 176.5, "w": null, "h": null },
+      "outline": null,
+      "pocket": { "style": "bbox", "clearance_mm": 1.2, "depth_mm": null, "fingerScoop": true },
+      "verified": false,
+      "source": "milwaukee-spec: milwaukeetool.com product 2904-20, Length 6.95 in. w/h need measurement.",
+      "notes": "Length is nose-to-back-of-housing. Height (chuck to base of battery) and width (grip) must be measured. Batteried footprint is larger."
+    },
+    {
+      "id": "m18-fuel-impact-2953",
+      "name": "M18 FUEL 1/4\" Hex Impact Driver (bare)",
+      "brand": "Milwaukee",
+      "modelNumbers": ["2953-20"],
+      "category": "impact",
+      "bbox_mm": { "l": 113.5, "w": null, "h": null },
+      "outline": null,
+      "pocket": { "style": "bbox", "clearance_mm": 1.2, "depth_mm": null, "fingerScoop": true },
+      "verified": false,
+      "source": "milwaukee-spec: milwaukeetool.com product 2953-20, Length 4.47 in. w/h need measurement.",
+      "notes": ""
+    },
+    {
+      "id": "m18-redlithium-xc5",
+      "name": "M18 REDLITHIUM XC5.0 Battery",
+      "brand": "Milwaukee",
+      "modelNumbers": ["48-11-1850"],
+      "category": "accessory",
+      "bbox_mm": { "l": null, "w": null, "h": null },
+      "outline": null,
+      "pocket": { "style": "bbox", "clearance_mm": 0.8, "depth_mm": null, "fingerScoop": true },
+      "verified": false,
+      "source": "",
+      "notes": "Milwaukee does not publish battery pack dimensions. Measure. Batteries pack tightly -- a smaller clearance is usually fine."
+    },
+    {
+      "id": "m12-fuel-drill-2504",
+      "name": "M12 FUEL 1/2\" Drill/Driver (bare)",
+      "brand": "Milwaukee",
+      "modelNumbers": ["2504-20"],
+      "category": "drill",
+      "bbox_mm": { "l": 165.1, "w": null, "h": null },
+      "outline": null,
+      "pocket": { "style": "bbox", "clearance_mm": 1.2, "depth_mm": null, "fingerScoop": true },
+      "verified": false,
+      "source": "milwaukee-spec: milwaukeetool.com product 2504-20, Length 6.5 in (confirm). w/h need measurement.",
+      "notes": "Length pending re-check against the live spec table."
+    },
+    {
+      "id": "generic-tape-25ft",
+      "name": "Tape measure, 25 ft",
+      "brand": "",
+      "modelNumbers": [],
+      "category": "hand-tool",
+      "bbox_mm": { "l": null, "w": null, "h": null },
+      "outline": null,
+      "pocket": { "style": "bbox", "clearance_mm": 1.5, "depth_mm": null, "fingerScoop": true },
+      "verified": false,
+      "source": "",
+      "notes": "Generic placeholder. Measure your own -- 25 ft tapes vary a lot between brands."
+    },
+    {
+      "id": "generic-utility-knife",
+      "name": "Utility knife",
+      "brand": "",
+      "modelNumbers": [],
+      "category": "hand-tool",
+      "bbox_mm": { "l": null, "w": null, "h": null },
+      "outline": null,
+      "pocket": { "style": "bbox", "clearance_mm": 1.5, "depth_mm": null, "fingerScoop": true },
+      "verified": false,
+      "source": "",
+      "notes": "Generic placeholder. Measure your own."
+    }
+  ]
+}
