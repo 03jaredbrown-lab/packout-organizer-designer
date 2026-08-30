@@ -448,6 +448,8 @@ function ArrangePanel() {
         />
       </Row>
 
+      {sel && <PocketPanel placementId={sel.id} />}
+
       <SectionTitle>
         Verify{" "}
         {validation
@@ -467,6 +469,54 @@ function ArrangePanel() {
         ))}
       </Card>
     </View>
+  );
+}
+
+function PocketPanel({ placementId }: { placementId: string }) {
+  const project = useDesignStore((s) => s.project);
+  const unit = useDesignStore((s) => s.displayUnit);
+  const setOverride = useDesignStore((s) => s.updatePlacementOverride);
+  const pl = project.placements.find((p) => p.id === placementId);
+  const tool = pl ? project.tools.find((t) => t.id === pl.toolId) : undefined;
+  if (!pl || !tool) return null;
+
+  const clearance = pl.overrides.clearance_mm ?? tool.pocket.clearance_mm;
+  const depth = pl.overrides.depth_mm ?? tool.pocket.depth_mm;
+  const scoop = pl.overrides.fingerScoop ?? tool.pocket.fingerScoop;
+
+  return (
+    <>
+      <SectionTitle>Selected pocket — {tool.name}</SectionTitle>
+      <Card>
+        <Row style={{ gap: 8 }}>
+          <View style={{ flex: 1 }}>
+            <NumberField
+              label={`Clearance (${unit})`}
+              value={numStr(clearance, unit)}
+              onCommit={(r) => setOverride(placementId, { clearance_mm: toMm(r, unit) ?? undefined })}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <NumberField
+              label={`Depth (${unit}) — blank = auto`}
+              value={numStr(depth, unit)}
+              onCommit={(r) => setOverride(placementId, { depth_mm: toMm(r, unit) ?? undefined })}
+            />
+          </View>
+        </Row>
+        <Pressable
+          onPress={() => setOverride(placementId, { fingerScoop: !scoop })}
+          style={st.choice}
+        >
+          <View style={[st.checkbox, scoop && { backgroundColor: C.accent }]} />
+          <Text style={st.choiceText}>Finger scoop</Text>
+        </Pressable>
+        <Text style={{ fontSize: 11, color: C.muted, marginTop: 4 }}>
+          Position {numStr(pl.x_mm, unit)} , {numStr(pl.y_mm, unit)} · rotation{" "}
+          {(((pl.rot_deg % 360) + 360) % 360).toFixed(0)}°
+        </Text>
+      </Card>
+    </>
   );
 }
 
