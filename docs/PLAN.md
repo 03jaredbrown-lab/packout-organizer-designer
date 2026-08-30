@@ -35,8 +35,14 @@ are saved as downloaded `.json` and re-loaded by the user. Tool/container
 libraries ship as static JSON in the repo, with user additions kept in
 `localStorage` and exportable as CSV/JSON.
 
+The model, layout, and geometry code is a **portable core** with no browser/Node
+API dependencies, re-exported from `src/core/index.ts`. `exportInsertSTL()`
+already returns raw bytes, so the same code can back a hosted export API or a
+mobile client without a rewrite. See [`ARCHITECTURE.md`](ARCHITECTURE.md).
+
 Later (not v1): hosted shared libraries, optional accounts, a print-service
-hand-off.
+hand-off, a hosted STL/export API, and native iOS/Android clients — see
+**Beyond v1** below.
 
 ### Layers
 
@@ -93,6 +99,27 @@ keep manifold-3d as the escape hatch.
   starter tool set; CSV import/export for shareable libraries.
 - **M7 — Polish**: label embossing, finger-scoop presets, multi-zone inserts,
   stacked layers, bed-size tiling.
+
+## Beyond v1 — hosted export + mobile (future scope, not scheduled)
+
+The web app stays fully client-side. These are additive:
+
+- **Extract `packages/core`** — turn `src/model` + `src/layout` + `src/geometry`
+  (already dependency-free of any platform) into a standalone package so web,
+  backend, and mobile share one implementation of validation + geometry.
+- **Hosted STL/export API** — a small stateless service wrapping the core:
+  `POST /v1/stl` (project JSON → binary STL) and `POST /v1/stl/email`
+  (project + address → STL generated and emailed as an attachment). Pure
+  function of the request body, so responses cache on a project hash. This is
+  where a backend finally enters the picture — and the point at which Replit or
+  a serverless host earns its place.
+- **iOS + Android apps** — native / React Native UI for the arrange-and-verify
+  loop, calling the hosted API for STL generation and the email hand-off rather
+  than porting the geometry code to Swift/Kotlin. Emailing the finished `.stl`
+  from the app is the headline mobile feature.
+
+See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the boundary this depends on and the
+rule for keeping it clean.
 
 ## Decisions (resolved 2026-08-29)
 

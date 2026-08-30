@@ -69,6 +69,17 @@ build. Use it if you want in-browser editing or a share link without touching
 GitHub Actions. Tradeoff: Replit adds a moving part and (on the free tier) the
 dev URL sleeps; Pages is zero-maintenance but build-then-deploy only.
 
+## Roadmap / future scope
+
+- Near term: 3D preview, finger-scoop geometry, real test-print calibration,
+  measured container cavities. See [`docs/PLAN.md`](docs/PLAN.md).
+- **Beyond v1 (not scheduled): a hosted STL/export API and native iOS + Android
+  apps** — including emailing the finished `.stl` straight from the app. The
+  model, layout, and geometry code is already a platform-agnostic core
+  (`src/core/index.ts`, no DOM/Node deps) so a backend or mobile client can call
+  `exportInsertSTL()` without a rewrite. The boundary and the plan are in
+  [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
 ## Development
 
 Requires Node.js 20+.
@@ -80,5 +91,6 @@ npm test           # vitest — geometry + validation
 npm run build      # tsc -b && vite build  ->  dist/
 ```
 
-See [`docs/PLAN.md`](docs/PLAN.md) for the roadmap and
+See [`docs/PLAN.md`](docs/PLAN.md) for the roadmap,
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the portable-core boundary, and
 [`docs/DATA-MODEL.md`](docs/DATA-MODEL.md) for the schema.
