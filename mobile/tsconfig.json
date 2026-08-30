@@ -8,7 +8,13 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["react"]
+    "types": ["react"],
+    "baseUrl": ".",
+    "paths": {
+      // The shared core in ../src imports `zod`; it is installed here in
+      // mobile/node_modules, not up the tree from ../src, so point tsc at it.
+      "zod": ["./node_modules/zod"]
+    }
   },
   "include": [
     "index.ts",
