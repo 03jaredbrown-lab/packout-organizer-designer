@@ -416,10 +416,22 @@ function ArrangePanel() {
     [project, usable],
   );
   const sel = project.placements.find((p) => p.id === selectedId);
+  const [view, setView] = useState<"realistic" | "schematic">("realistic");
 
   return (
     <View>
-      <ArrangeCanvas />
+      <View style={{ alignItems: "center", marginBottom: 10 }}>
+        <Segmented<"realistic" | "schematic">
+          options={[
+            { value: "realistic", label: "Realistic" },
+            { value: "schematic", label: "Schematic" },
+          ]}
+          value={view}
+          onChange={setView}
+        />
+      </View>
+
+      <ArrangeCanvas mode={view} />
 
       <Row style={{ marginTop: 12, flexWrap: "wrap", gap: 8 }}>
         <Btn label="Auto-arrange" onPress={autoArrangeAll} />
