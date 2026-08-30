@@ -60,18 +60,25 @@ pure and cheap; it runs fine on the phone. The share sheet covers "get the file
 off my device". A server only becomes necessary for things the phone genuinely
 can't do alone — see below.
 
-### Still future scope (a backend, when it's actually needed)
+### Backend — `server/` (written, not deployed)
 
 1. **Extract the core to `packages/core`** (workspace-linked) so web, mobile, and
-   any backend depend on one copy. `mobile/src/store.ts` currently duplicates the
-   web store's reducers — that logic should move to the core in the same pass.
-2. **Hosted export API** — a small stateless service:
-   - `POST /v1/stl` (project JSON → binary STL). Internally: `parseProject` →
+   the backend depend on one copy — the last consumer to still reach into
+   `../src/*` directly. *(Shared store reducer logic is already hoisted into
+   `src/layout/designOps.ts`; the file move itself is the remaining step.)*
+2. **`server/` — the STL API.** A `Hono` fetch app wrapping the core with no
+   logic of its own:
+   - `POST /v1/stl` — `{ project, override? }` → binary STL, or `4xx` JSON with
+     the fit `issues`. Internally: `safeParseProject` → `mergeContainer` →
      `validateLayout` (reject on errors) → `exportInsertSTL`.
-   - `POST /v1/stl/email` (`{ project, email }` → STL generated **and emailed**).
-     This is the one feature that truly needs a server; the on-device share sheet
-     is the v1 substitute.
+   - `POST /v1/stl/email` — `{ project, email, override? }` → STL generated **and
+     emailed** (nodemailer, lazy, `SMTP_URL`-gated; `501` until configured). This
+     is the one feature the on-device share sheet can't cover.
    - Pure function of the body → cache on a project hash.
+   - Deploys as-is to Node; route logic is platform-agnostic for
+     Workers / Vercel / Deno (swap the bootstrap adapter).
+   - **Not deployed anywhere yet** — picking a host + Dockerfile touches
+     account/billing setup.
 3. **Shared/synced tool libraries and accounts** — also server-side when they land.
 
 Design rule going forward: **new features land in `src/core` unless they are

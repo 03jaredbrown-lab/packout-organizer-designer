@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "zod": ["./node_modules/zod"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "../src/core/**/*.ts",
+    "../src/model/**/*.ts",
+    "../src/layout/**/*.ts",
+    "../src/geometry/**/*.ts",
+    "../src/data/**/*.ts",
+    "../data/**/*.json"
+  ],
+  "exclude": ["node_modules", "../src/**/*.test.ts"]
+}

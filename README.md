@@ -85,8 +85,10 @@ an iPhone.
 - iOS app polish → Android → TestFlight.
 - **A backend only where one is actually needed:** server-side "email me the STL",
   synced shared libraries, accounts. STL generation itself is a pure function of
-  the inputs and runs client-side on both web and mobile. Boundary + plan in
-  [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+  the inputs and runs client-side on both web and mobile. A first cut of the
+  service lives in [`server/`](server/) (a `Hono` app wrapping the core;
+  `POST /v1/stl` + `/v1/stl/email`) — written and typechecked, not deployed yet.
+  Boundary + plan in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Development
 

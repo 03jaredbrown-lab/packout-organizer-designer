@@ -1,0 +1,31 @@
+name: Server typecheck (informational)
+
+# Best-effort, non-blocking: installs the STL API's deps and typechecks it plus
+# the shared core it imports. The service isn't deployed yet.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "server/**"
+      - "src/**"
+      - ".github/workflows/server-ci.yml"
+  pull_request:
+    paths:
+      - "server/**"
+      - "src/**"
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+      - run: npx tsc --noEmit

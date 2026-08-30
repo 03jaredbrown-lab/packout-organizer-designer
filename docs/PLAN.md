@@ -117,14 +117,15 @@ project save/load, Android pass, then TestFlight.
 
 The web and mobile apps both stay client-side. A server only enters for:
 
-- **`packages/core` extraction** — hoist `src/model` + `src/layout` +
-  `src/geometry` (and the shared store reducers `mobile/src/store.ts` currently
-  duplicates) into one workspace package consumed by web + mobile + backend.
-- **Hosted STL/export API** — `POST /v1/stl` (project → binary STL) and
-  `POST /v1/stl/email` (project + address → STL generated **and emailed**). The
-  email hand-off is the one feature the phone can't do alone; on device we use
-  the share sheet instead. Pure function of the body → cache on a project hash.
-  This is where Replit or a serverless host earns its place.
+- **`packages/core` extraction** — move `src/model` + `src/layout` +
+  `src/geometry` into one workspace package consumed by web + mobile + `server/`.
+  Shared store reducer logic is already hoisted (`src/layout/designOps.ts`); the
+  file move is what's left.
+- **STL/export API** 🚧 — `server/` holds a first cut: a `Hono` app wrapping the
+  core with `POST /v1/stl` (project → binary STL, `4xx` + fit issues otherwise)
+  and `POST /v1/stl/email` (project + address → STL generated **and emailed**,
+  SMTP-gated). Pure function of the body → cache on a project hash. *Written and
+  typechecked; not deployed — a host + Dockerfile touches billing setup.*
 - **Shared/synced tool libraries and accounts.**
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the boundary this depends on.
