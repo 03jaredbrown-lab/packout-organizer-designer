@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "PACKOUT Designer",
+    "slug": "packout-organizer-designer",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "packout",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lockedin4x4.packoutdesigner"
+    },
+    "android": {
+      "package": "com.lockedin4x4.packoutdesigner"
+    },
+    "assetBundlePatterns": ["**/*"]
+  }
+}

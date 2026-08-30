@@ -70,15 +70,22 @@ build. Use it if you want in-browser editing or a share link without touching
 GitHub Actions. Tradeoff: Replit adds a moving part and (on the free tier) the
 dev URL sleeps; Pages is zero-maintenance but build-then-deploy only.
 
+## iOS app
+
+An Expo / React Native client is under way in [`mobile/`](mobile/). It reuses this
+repo's TypeScript core (`src/model`, `src/layout`, `src/geometry`) unchanged,
+generates the STL **on device**, and hands it to the iOS share sheet — no backend.
+Runs in Expo Go; see [`mobile/README.md`](mobile/README.md) for how to get it on
+an iPhone.
+
 ## Roadmap / future scope
 
 - Near term: 3D preview, finger-scoop geometry, real test-print calibration,
   measured container cavities. See [`docs/PLAN.md`](docs/PLAN.md).
-- **Beyond v1 (not scheduled): a hosted STL/export API and native iOS + Android
-  apps** — including emailing the finished `.stl` straight from the app. The
-  model, layout, and geometry code is already a platform-agnostic core
-  (`src/core/index.ts`, no DOM/Node deps) so a backend or mobile client can call
-  `exportInsertSTL()` without a rewrite. The boundary and the plan are in
+- iOS app polish → Android → TestFlight.
+- **A backend only where one is actually needed:** server-side "email me the STL",
+  synced shared libraries, accounts. STL generation itself is a pure function of
+  the inputs and runs client-side on both web and mobile. Boundary + plan in
   [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Development

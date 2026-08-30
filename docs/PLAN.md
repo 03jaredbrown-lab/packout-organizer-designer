@@ -102,26 +102,32 @@ keep manifold-3d as the escape hatch.
 - **M7 — Polish**: label embossing, finger-scoop presets, multi-zone inserts,
   stacked layers, bed-size tiling.
 
-## Beyond v1 — hosted export + mobile (future scope, not scheduled)
+## Mobile — iOS app (in progress, `mobile/`)
 
-The web app stays fully client-side. These are additive:
+**M-i1 — Expo skeleton** 🚧 (started 2026-08-29): React Native / Expo app that
+imports the shared core from `../src/*` unchanged. Container picker + cavity
+entry, tool list + measure form, `react-native-svg` arrange canvas (drag / rotate
+/ auto-arrange), live fit checks, and **on-device STL generation → iOS share
+sheet**. No backend. Runs in Expo Go. See [`../mobile/README.md`](../mobile/README.md).
 
-- **Extract `packages/core`** — turn `src/model` + `src/layout` + `src/geometry`
-  (already dependency-free of any platform) into a standalone package so web,
-  backend, and mobile share one implementation of validation + geometry.
-- **Hosted STL/export API** — a small stateless service wrapping the core:
-  `POST /v1/stl` (project JSON → binary STL) and `POST /v1/stl/email`
-  (project + address → STL generated and emailed as an attachment). Pure
-  function of the request body, so responses cache on a project hash. This is
-  where a backend finally enters the picture — and the point at which Replit or
-  a serverless host earns its place.
-- **iOS + Android apps** — native / React Native UI for the arrange-and-verify
-  loop, calling the hosted API for STL generation and the email hand-off rather
-  than porting the geometry code to Swift/Kotlin. Emailing the finished `.stl`
-  from the app is the headline mobile feature.
+*Remaining:* realistic silhouette render on the RN canvas, pinch/pan zoom,
+project save/load, Android pass, then TestFlight.
 
-See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the boundary this depends on and the
-rule for keeping it clean.
+## Beyond v1 — a backend, when something needs one
+
+The web and mobile apps both stay client-side. A server only enters for:
+
+- **`packages/core` extraction** — hoist `src/model` + `src/layout` +
+  `src/geometry` (and the shared store reducers `mobile/src/store.ts` currently
+  duplicates) into one workspace package consumed by web + mobile + backend.
+- **Hosted STL/export API** — `POST /v1/stl` (project → binary STL) and
+  `POST /v1/stl/email` (project + address → STL generated **and emailed**). The
+  email hand-off is the one feature the phone can't do alone; on device we use
+  the share sheet instead. Pure function of the body → cache on a project hash.
+  This is where Replit or a serverless host earns its place.
+- **Shared/synced tool libraries and accounts.**
+
+See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the boundary this depends on.
 
 ## Decisions (resolved 2026-08-29)
 

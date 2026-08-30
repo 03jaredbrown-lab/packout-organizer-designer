@@ -1,0 +1,33 @@
+name: Mobile typecheck (informational)
+
+# Best-effort: installs the Expo app's deps and runs `tsc --noEmit` over the
+# mobile app + the shared core it imports. Non-blocking — the canonical way to
+# get exact, SDK-correct versions is `npx create-expo-app` on the dev machine
+# (see mobile/README.md); this job is just an early signal.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "mobile/**"
+      - "src/**"
+      - ".github/workflows/mobile-ci.yml"
+  pull_request:
+    paths:
+      - "mobile/**"
+      - "src/**"
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+      - run: npx tsc --noEmit

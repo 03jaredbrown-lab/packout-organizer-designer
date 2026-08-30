@@ -1,0 +1,26 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "react-jsx",
+    "lib": ["ESNext", "DOM"],
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["react"]
+  },
+  "include": [
+    "index.ts",
+    "App.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "../src/core/**/*.ts",
+    "../src/model/**/*.ts",
+    "../src/layout/**/*.ts",
+    "../src/geometry/**/*.ts",
+    "../src/data/**/*.ts",
+    "../data/**/*.json"
+  ],
+  "exclude": ["node_modules", "../src/**/*.test.ts", "../src/**/*.test.tsx"]
+}
