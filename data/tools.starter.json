@@ -21,12 +21,19 @@
       "brand": "Milwaukee",
       "modelNumbers": ["2953-20"],
       "category": "impact",
-      "bbox_mm": { "l": 113.5, "w": null, "h": null },
+      "bbox_mm": { "l": 113.5, "w": 124, "h": 66 },
       "outline": null,
-      "pocket": { "style": "bbox", "clearance_mm": 1.2, "depth_mm": null, "fingerScoop": true },
+      "pocketRects": [
+        { "x": 0, "y": 28, "w": 16, "h": 22 },
+        { "x": 14, "y": 0, "w": 42, "h": 78 },
+        { "x": 40, "y": 8, "w": 73, "h": 54 },
+        { "x": 50, "y": 58, "w": 37, "h": 50 },
+        { "x": 44, "y": 100, "w": 52, "h": 24 }
+      ],
+      "pocket": { "style": "outline", "clearance_mm": 1.2, "depth_mm": null, "fingerScoop": true },
       "verified": false,
-      "source": "milwaukee-spec: milwaukeetool.com product 2953-20, Length 4.47 in. w/h need measurement.",
-      "notes": ""
+      "source": "Length 4.47 in from milwaukeetool.com (2953-20). Side-profile outline traced from the Sketchfab model 'Milwaukee M18 Impact 1/4\" Hex' by nicknothom (sketchfab.com/3d-models/2ef3aa17e2da486dabeea824c13b84d9), scaled so nose-to-tail = 113.5 mm.",
+      "notes": "PROVISIONAL / not caliper-verified. Modelled lying on its SIDE: bbox l = length (nose-to-tail), w = tool height (head top to grip base, no battery, ~124 mm), h = body width (~66 mm, becomes pocket depth). pocketRects (tool-local mm, x along length / y = height) approximate: [nose collar, hammer head, motor body, grip, grip foot]. Confirm head/grip positions and body width with calipers before printing."
     },
     {
       "id": "m18-redlithium-xc5",

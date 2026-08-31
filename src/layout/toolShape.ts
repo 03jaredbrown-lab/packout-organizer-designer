@@ -6,6 +6,9 @@
  * is just the bounding box; two or three approximate an L- or T-shaped power
  * tool (barrel + pistol grip) well enough to read at a glance and to carve.
  *
+ * Priority: an explicit `tool.pocketRects` (measured or traced from the real
+ * tool) is used verbatim; otherwise the shape is inferred from category + name.
+ *
  * Rectangles (rather than an arbitrary polygon) keep every downstream step
  * simple: the fit checks stay convex per-part, and the rectilinear STL engine
  * can carve each part directly.
@@ -81,6 +84,12 @@ export function toolShapeRects(tool: Tool): Rect[] {
   const l = tool.bbox_mm.l ?? 0;
   const w = tool.bbox_mm.w ?? 0;
   if (l <= 0 || w <= 0) return bbox(l, w);
+
+  // An explicit per-tool outline always wins — this is the measured/traced shape.
+  if (tool.pocketRects && tool.pocketRects.length > 0) {
+    return clampToBbox(tool.pocketRects, l, w).filter((r) => r.w > 0 && r.h > 0);
+  }
+
   if (tool.pocket.style === "cylinder") return bbox(l, w);
 
   switch (shapeKey(tool.category, tool.name)) {

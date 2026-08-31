@@ -80,6 +80,13 @@ export interface Tool {
   bbox_mm: { l: number | null; w: number | null; h: number | null };
   /** Optional tighter footprint polygon in top-down view, millimetres, relative to the bbox top-left. */
   outline: Array<[number, number]> | null;
+  /**
+   * Exact pocket footprint as a union of axis-aligned rectangles, tool-local mm:
+   * x runs along the length (0..bbox.l), y across the width (0..bbox.w). When
+   * set, this is the carved pocket outline and overrides the category/name
+   * silhouette. `null` / absent → inferred shape (see src/layout/toolShape.ts).
+   */
+  pocketRects?: Array<{ x: number; y: number; w: number; h: number }> | null;
   pocket: PocketSpec;
   verified: boolean;
   source: string;

@@ -56,6 +56,17 @@ export const toolSchema = z.object({
   ]),
   bbox_mm: z.object({ l: nullableLength, w: nullableLength, h: nullableLength }),
   outline: z.array(z.tuple([z.number(), z.number()])).nullable().default(null),
+  pocketRects: z
+    .array(
+      z.object({
+        x: z.number().nonnegative(),
+        y: z.number().nonnegative(),
+        w: z.number().positive(),
+        h: z.number().positive(),
+      }),
+    )
+    .nullable()
+    .default(null),
   pocket: pocketSpecSchema,
   verified: z.boolean().default(false),
   source: z.string().default(""),
