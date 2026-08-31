@@ -1,6 +1,23 @@
 import type { Project, UsableContainer } from "../model/types";
-import { marginInsideBounds, polygonGap, polygonsOverlap } from "./geometry2d";
+import { marginInsideBounds, polygonGap, polygonsOverlap, type Polygon, type Rect } from "./geometry2d";
 import { insertFootprint, resolveAllPockets, type ResolvedPocket } from "./pockets";
+
+/** Smallest margin any convex part of a pocket has inside the insert bounds. */
+function partsMarginInside(parts: Polygon[], bounds: Rect): number {
+  return Math.min(...parts.map((p) => marginInsideBounds(p, bounds)));
+}
+
+/** Two pockets overlap if any of their convex parts overlap. */
+function partsOverlap(a: Polygon[], b: Polygon[]): boolean {
+  return a.some((pa) => b.some((pb) => polygonsOverlap(pa, pb)));
+}
+
+/** Closest approach between two pockets, over every pair of their parts. */
+function partsGap(a: Polygon[], b: Polygon[]): number {
+  let best = Infinity;
+  for (const pa of a) for (const pb of b) best = Math.min(best, polygonGap(pa, pb));
+  return best;
+}
 
 export type IssueSeverity = "error" | "warning";
 
@@ -70,7 +87,7 @@ export function validateLayout(project: Project, container: UsableContainer): Va
 
   // Per-pocket: bounds, edge wall, depth sanity.
   for (const pk of pockets) {
-    const margin = marginInsideBounds(pk.footprint, footprint);
+    const margin = partsMarginInside(pk.footprintParts, footprint);
     if (margin < 0) {
       issues.push({
         severity: "error",
@@ -110,7 +127,7 @@ export function validateLayout(project: Project, container: UsableContainer): Va
     for (let j = i + 1; j < pockets.length; j++) {
       const a = pockets[i];
       const b = pockets[j];
-      if (polygonsOverlap(a.footprint, b.footprint)) {
+      if (partsOverlap(a.footprintParts, b.footprintParts)) {
         issues.push({
           severity: "error",
           code: "overlap",
@@ -119,7 +136,7 @@ export function validateLayout(project: Project, container: UsableContainer): Va
         });
         continue;
       }
-      const gap = polygonGap(a.footprint, b.footprint);
+      const gap = partsGap(a.footprintParts, b.footprintParts);
       if (gap + 1e-6 < g.minWall_mm) {
         issues.push({
           severity: "warning",

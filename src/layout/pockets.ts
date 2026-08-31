@@ -1,13 +1,24 @@
 import type { GlobalParams, Placement, Project, Tool, UsableContainer } from "../model/types";
 import { isUsableTool } from "../model/types";
 import { boundingBox, rectPolygon, rotatePolygon, type Polygon, type Rect } from "./geometry2d";
+import { toolShapeRects } from "./toolShape";
 
 export interface ResolvedPocket {
   placementId: string;
   toolId: string;
   toolName: string;
-  /** Footprint polygon in layout mm, clearance already applied, rotation already applied. */
+  /**
+   * Outer footprint polygon in layout mm — clearance and rotation applied. For
+   * a contoured tool this is the convex outline of the whole pocket; use
+   * `footprintParts` for the exact shape.
+   */
   footprint: Polygon;
+  /**
+   * The pocket as a union of convex parts (one rectangle each), clearance and
+   * rotation applied. One entry for a plain bbox pocket, two or three for an
+   * L-/T-shaped power tool. This is what fit checks and the carve should use.
+   */
+  footprintParts: Polygon[];
   /** Axis-aligned bounds of the footprint. */
   bounds: Rect;
   clearance_mm: number;
@@ -40,26 +51,37 @@ export function resolvePocket(
   g: GlobalParams,
 ): ResolvedPocket | null {
   if (!isUsableTool(tool)) return null;
-  const { l, w, h } = tool.bbox_mm;
+  const { h } = tool.bbox_mm;
   const clearance = resolveClearance(tool, placement, g);
 
-  // Uniform clearance = expand the axis-aligned footprint by `clearance` on every
-  // side, then rotate the whole pocket about its centre.
-  const expanded: Rect = {
-    x: placement.x_mm - clearance,
-    y: placement.y_mm - clearance,
-    w: l + 2 * clearance,
-    h: w + 2 * clearance,
-  };
-  let poly = rectPolygon(expanded);
-  if (placement.rot_deg % 360 !== 0) poly = rotatePolygon(poly, placement.rot_deg);
+  // Tool-local shape rectangles (x along length, y along width). Expand each by
+  // `clearance` on every side and translate to the placement origin. Parts of a
+  // contoured shape may overlap once expanded — that is fine, their union is the
+  // pocket; a narrow concave notch simply fills in with support material.
+  const expanded: Rect[] = toolShapeRects(tool).map((r) => ({
+    x: placement.x_mm + r.x - clearance,
+    y: placement.y_mm + r.y - clearance,
+    w: r.w + 2 * clearance,
+    h: r.h + 2 * clearance,
+  }));
+
+  // Rotate every part about one shared centre: the centre of the un-rotated
+  // union bounds, so the parts stay locked together.
+  const preBounds = boundingBox(expanded.flatMap(rectPolygon));
+  const centre = { x: preBounds.x + preBounds.w / 2, y: preBounds.y + preBounds.h / 2 };
+  const rot = placement.rot_deg % 360;
+  const rotate = (poly: Polygon) => (rot !== 0 ? rotatePolygon(poly, rot, centre) : poly);
+
+  const footprintParts = expanded.map((r) => rotate(rectPolygon(r)));
+  const footprint = rotate(rectPolygon(preBounds));
 
   return {
     placementId: placement.id,
     toolId: tool.id,
     toolName: tool.name,
-    footprint: poly,
-    bounds: boundingBox(poly),
+    footprint,
+    footprintParts,
+    bounds: boundingBox(footprint),
     clearance_mm: clearance,
     depth_mm: resolveDepth(tool, placement, h),
     fingerScoop: resolveFingerScoop(tool, placement),
