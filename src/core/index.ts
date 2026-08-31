@@ -71,6 +71,8 @@ export {
 } from "../layout/pockets";
 export type { ResolvedPocket } from "../layout/pockets";
 
+export { toolShapeRects, hasContouredShape } from "../layout/toolShape";
+
 export { validateLayout } from "../layout/validate";
 export type { Issue, IssueSeverity, ValidationResult } from "../layout/validate";
 

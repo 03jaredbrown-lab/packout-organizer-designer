@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useDesignStore, useEffectiveContainer } from "../store/useDesignStore";
 import { isUsableContainer, isUsableTool, type ToolCategory } from "../model/types";
 import { insertFootprint, resolveClearance, resolveDepth } from "../layout/pockets";
+import { toolShapeRects } from "../layout/toolShape";
 import { validateLayout } from "../layout/validate";
 import { boundingBox, rectPolygon, rotatePolygon, type Rect } from "../layout/geometry2d";
 import { ToolGlyph } from "./toolIcons";
@@ -19,6 +20,8 @@ interface Item {
   category: ToolCategory;
   toolRect: Rect;
   clearRect: Rect;
+  /** Pocket outline as tool-local rectangles, clearance applied, pre-rotation. */
+  shapeParts: Rect[];
   center: { x: number; y: number };
   depth: number;
   fingerScoop: boolean;
@@ -72,6 +75,12 @@ export function Canvas2D() {
         category: tool.category,
         toolRect: { x: p.x_mm, y: p.y_mm, w: l, h: w },
         clearRect: { x: p.x_mm - c, y: p.y_mm - c, w: l + 2 * c, h: w + 2 * c },
+        shapeParts: toolShapeRects(tool).map((r) => ({
+          x: p.x_mm + r.x - c,
+          y: p.y_mm + r.y - c,
+          w: r.w + 2 * c,
+          h: r.h + 2 * c,
+        })),
         center: { x: p.x_mm + l / 2, y: p.y_mm + w / 2 },
         depth: resolveDepth(tool, p, h),
         fingerScoop: p.overrides.fingerScoop ?? tool.pocket.fingerScoop,
@@ -311,17 +320,20 @@ export function Canvas2D() {
                         filter="url(#pocketInset)"
                       />
                     )}
-                    <rect
-                      x={cr.x}
-                      y={cr.y}
-                      width={cr.w}
-                      height={cr.h}
-                      rx={rx}
-                      fill={floor}
-                      stroke="#a99e86"
-                      strokeWidth={0.4}
-                      filter="url(#pocketInset)"
-                    />
+                    {it.shapeParts.map((sp, i) => (
+                      <rect
+                        key={i}
+                        x={sp.x}
+                        y={sp.y}
+                        width={sp.w}
+                        height={sp.h}
+                        rx={Math.min(3, sp.w / 6, sp.h / 6)}
+                        fill={floor}
+                        stroke="#a99e86"
+                        strokeWidth={0.4}
+                        filter="url(#pocketInset)"
+                      />
+                    ))}
                     <ToolGlyph
                       category={it.category}
                       name={it.name}
@@ -333,15 +345,18 @@ export function Canvas2D() {
                     />
                   </>
                 ) : (
-                  <rect
-                    x={cr.x}
-                    y={cr.y}
-                    width={cr.w}
-                    height={cr.h}
-                    fill="rgba(76,139,245,0.14)"
-                    stroke="#4c8bf5"
-                    strokeWidth={0.6}
-                  />
+                  it.shapeParts.map((sp, i) => (
+                    <rect
+                      key={i}
+                      x={sp.x}
+                      y={sp.y}
+                      width={sp.w}
+                      height={sp.h}
+                      fill="rgba(76,139,245,0.14)"
+                      stroke="#4c8bf5"
+                      strokeWidth={0.6}
+                    />
+                  ))
                 )}
 
                 {isBad && (
