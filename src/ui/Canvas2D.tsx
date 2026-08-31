@@ -22,6 +22,8 @@ interface Item {
   clearRect: Rect;
   /** Pocket outline as tool-local rectangles, clearance applied, pre-rotation. */
   shapeParts: Rect[];
+  /** True when the tool carries an explicit measured/traced outline. */
+  exactOutline: boolean;
   center: { x: number; y: number };
   depth: number;
   fingerScoop: boolean;
@@ -81,6 +83,7 @@ export function Canvas2D() {
           w: r.w + 2 * c,
           h: r.h + 2 * c,
         })),
+        exactOutline: !!tool.pocketRects && tool.pocketRects.length > 0,
         center: { x: p.x_mm + l / 2, y: p.y_mm + w / 2 },
         depth: resolveDepth(tool, p, h),
         fingerScoop: p.overrides.fingerScoop ?? tool.pocket.fingerScoop,
@@ -334,15 +337,17 @@ export function Canvas2D() {
                         filter="url(#pocketInset)"
                       />
                     ))}
-                    <ToolGlyph
-                      category={it.category}
-                      name={it.name}
-                      x={it.toolRect.x}
-                      y={it.toolRect.y}
-                      w={it.toolRect.w}
-                      h={it.toolRect.h}
-                      color="#544c3e"
-                    />
+                    {!it.exactOutline && (
+                      <ToolGlyph
+                        category={it.category}
+                        name={it.name}
+                        x={it.toolRect.x}
+                        y={it.toolRect.y}
+                        w={it.toolRect.w}
+                        h={it.toolRect.h}
+                        color="#544c3e"
+                      />
+                    )}
                   </>
                 ) : (
                   it.shapeParts.map((sp, i) => (
