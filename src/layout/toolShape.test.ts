@@ -75,4 +75,33 @@ describe("toolShapeRects", () => {
     const r = toolShapeRects(tool("M18 impact", "impact", 140, 45, "cylinder"));
     expect(r).toHaveLength(1);
   });
+
+  it("uses an explicit pocketRects outline verbatim, over the inferred shape", () => {
+    const t = tool("M18 FUEL Impact", "impact", 113.5, 124);
+    t.pocketRects = [
+      { x: 0, y: 28, w: 16, h: 22 },
+      { x: 14, y: 0, w: 42, h: 78 },
+      { x: 40, y: 8, w: 73, h: 54 },
+    ];
+    const r = toolShapeRects(t);
+    expect(r).toHaveLength(3);
+    expect(r[1]).toEqual({ x: 14, y: 0, w: 42, h: 78 });
+  });
+
+  it("clamps an explicit outline that pokes past the bounding box", () => {
+    const t = tool("clipped", "other", 100, 50);
+    t.pocketRects = [{ x: 80, y: 40, w: 40, h: 40 }]; // extends to 120 x 80
+    const [r] = toolShapeRects(t);
+    expect(r.x + r.w).toBeLessThanOrEqual(100 + 1e-9);
+    expect(r.y + r.h).toBeLessThanOrEqual(50 + 1e-9);
+  });
+
+  it("even 'cylinder' style yields to an explicit outline", () => {
+    const t = tool("M18 impact", "impact", 140, 45, "cylinder");
+    t.pocketRects = [
+      { x: 0, y: 0, w: 90, h: 45 },
+      { x: 30, y: 20, w: 40, h: 25 },
+    ];
+    expect(toolShapeRects(t)).toHaveLength(2);
+  });
 });
