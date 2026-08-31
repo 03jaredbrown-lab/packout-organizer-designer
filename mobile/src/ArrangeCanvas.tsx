@@ -270,7 +270,7 @@ export function ArrangeCanvas({ mode = "realistic" }: { mode?: "realistic" | "sc
                   strokeOpacity={0.35}
                   strokeWidth={0.5}
                 />
-                {tool && (
+                {tool && !(tool.pocketRects && tool.pocketRects.length > 0) && (
                   <ToolGlyph
                     category={tool.category}
                     name={tool.name}
